@@ -1,5 +1,6 @@
 package com.chatserver.controller;
 
+
 import com.chatserver.model.Message;
 import com.chatserver.service.MessageService;
 import org.slf4j.Logger;
@@ -17,7 +18,6 @@ import java.util.List;
 
 @Controller
 public class ChatController {
-
     private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
     private final SimpMessagingTemplate messagingTemplate;
     private final MessageService messageService;
@@ -27,18 +27,10 @@ public class ChatController {
         this.messageService = messageService;
     }
 
-    @MessageMapping("/message") //app/message
-    @SendTo("/chatroom/public")
+    @MessageMapping("/message")
+    @SendTo("/chatroom/public/{roomId}") // 경로 수정
     public Message sendMessage(@Payload Message message) {
         logger.info("Public message received: {}", message);
-        messageService.saveMessage(message);
-        return message;
-    }
-
-    @MessageMapping("/private-message")
-    public Message sendPrivateMessage(@Payload Message message) {
-        logger.info("Private message received: {}", message);
-        messagingTemplate.convertAndSendToUser(message.getReceiverName(), "/private", message);
         messageService.saveMessage(message);
         return message;
     }
@@ -46,12 +38,27 @@ public class ChatController {
     @GetMapping("/messages/public")
     @ResponseBody
     public List<Message> getPublicMessages() {
-        return messageService.getPublicMessages();
+        logger.info("Fetching public messages");
+        List<Message> messages = messageService.getPublicMessages();
+        logger.info("Fetched public messages: {}", messages);
+        return messages;
     }
 
     @GetMapping("/messages/private/{username}")
     @ResponseBody
-    public List<Message> getPrivateMessages(@PathVariable String username) {
-        return messageService.getPrivateMessages(username);
+    public List<Message> getPrivateMessages(@PathVariable("username") String username) {
+        logger.info("Fetching private messages for user: {}", username);
+        List<Message> messages = messageService.getPrivateMessages(username);
+        logger.info("Fetched private messages: {}", messages);
+        return messages;
+    }
+
+    @GetMapping("/chatroom/public/{roomId}")
+    @ResponseBody
+    public List<Message> getMessages(@PathVariable("roomId") String roomId) {
+        logger.info("Fetching messages for room: {}", roomId);
+        List<Message> messages = messageService.getMessages(roomId);
+        logger.info("Fetched messages for room {}: {}", roomId, messages);
+        return messages;
     }
 }

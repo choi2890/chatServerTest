@@ -10,6 +10,8 @@ import java.util.List;
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
-        List<Message> findByReceiverNameIsNull();
+
         List<Message> findByReceiverName(String receiverName);
+        List<Message> findByRoomId(String roomId);
+
 }

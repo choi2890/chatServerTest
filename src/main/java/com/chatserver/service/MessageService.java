@@ -14,19 +14,19 @@ public class MessageService {
         this.messageRepository = messageRepository;
     }
 
-    public Message saveMessage(Message message) {
-        return messageRepository.save(message);
-    }
-
-    public List<Message> getAllMessages() {
-        return messageRepository.findAll();
+    public void saveMessage(Message message) {
+        messageRepository.save(message);
     }
 
     public List<Message> getPublicMessages() {
-        return messageRepository.findByReceiverNameIsNull();
+        return messageRepository.findByRoomId("public");
     }
 
     public List<Message> getPrivateMessages(String username) {
         return messageRepository.findByReceiverName(username);
+    }
+
+    public List<Message> getMessages(String roomId) {
+        return messageRepository.findByRoomId(roomId);
     }
 }
