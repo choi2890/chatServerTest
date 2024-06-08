@@ -28,7 +28,7 @@ public class ChatController {
     }
 
     @MessageMapping("/message")
-    @SendTo("/chatroom/public/{roomId}") // 경로 수정
+        @SendTo("/chatroom/public") // 경로 수정
     public Message sendMessage(@Payload Message message) {
         logger.info("Public message received: {}", message);
         messageService.saveMessage(message);

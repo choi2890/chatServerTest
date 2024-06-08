@@ -26,7 +26,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setApplicationDestinationPrefixes("/app");
         // enableSimpleBroker는 클라이언트로 메시지를 브로드캐스팅하기 위한 간단한 브로커를 활성화합니다.
         // "/topic"과 "/queue"로 시작하는 목적지로의 메시지를 브로커가 처리
-        registry.enableSimpleBroker("/chatroom", "/user","/private");
+        registry.enableSimpleBroker("/chatroom", "/user");
 
         registry.setUserDestinationPrefix("/user"); // 유저 목적지 접두사 설정
 
